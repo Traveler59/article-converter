@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import page from './page'
+import form from './form'
 
 export default combineReducers({
-	page
+	form
 })
