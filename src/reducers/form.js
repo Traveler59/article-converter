@@ -1,10 +1,10 @@
-import { SEND_ADDRESS } from '../actions/types'
+import { SEND_ADDRESS } from '../actions/types';
 
 const initialState = {
-	fileReady: false
+	fileReady: null
 }
 
-export default function form(state = initialState, action) {
+const form = (state = initialState, action) => {
 	switch (action.type) {
 		case SEND_ADDRESS:
 			return { ...state, fileReady: action.payload }
@@ -13,3 +13,5 @@ export default function form(state = initialState, action) {
 			return state;
 	}
 }
+
+export default form;

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { sendAddress } from '../actions/FormActions';
 
 export default class PostForm extends Component {
   constructor(props) {
@@ -12,9 +10,8 @@ export default class PostForm extends Component {
     };
   }
 
-  onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  }
+  onChange = e => this.setState({ [e.target.name]: e.target.value });
+
 
   onSubmit = e => {
     e.preventDefault();
@@ -28,6 +25,7 @@ export default class PostForm extends Component {
   }
 
   render() {
+    const fileReady = this.props.fileReady;
     return (
       <div>
         <h1>Скачать статью</h1>
@@ -55,7 +53,9 @@ export default class PostForm extends Component {
           <br />
           <button type='submit'>Отправить</button>
         </form>
-        {this.props.fileReady && <a href='/download' download>Скачать</a>}
+        {fileReady === true
+          ? <a href='/download' download>Скачать</a>
+          : fileReady === false ? 'Ошибка' : <div />}
       </div>
     );
   }

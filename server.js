@@ -11,23 +11,22 @@ app.use('/dist', express.static(__dirname + '/dist'));
 app.use(bodyParser.json()); // for parsing application/json
 
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
 	res.sendFile(__dirname + '/index.html')
 });
 
-app.get('/download', function (req, res) {
-	var file = __dirname + '/articles/sep.html';
+app.get('/download', (req, res) => {
+	const file = __dirname + '/articles/sep.html';
 	res.download(file); // Set disposition and send it.
 });
 
 app.post('/getArticle', (req, res) => {
 	if (!req.body) return res.sendStatus(400);
-	parseArticle(req.body.address, req.body.selectors);
-	res.send(req.body);
+	parseArticle(req.body.address, req.body.selectors, result => res.send(result));
 });
 
 
-const parseArticle = (address, userSelectors) => {
+const parseArticle = (address, userSelectors, sendResult) => {
 	https.get(address, res => {
 		let body = '';
 		res.on('data', chunk => body += chunk);
@@ -47,19 +46,22 @@ const parseArticle = (address, userSelectors) => {
 
 			if (~$('#content').text().indexOf('Document Not Found')) {
 				console.log('Статья не найдена')
+				sendResult(false);
 			} else {
 				fs.writeFile(`articles/sep.html`, $.html(), err => {
 					if (err) {
-						return console.log(err);
+						console.log(err);
+						sendResult(false);
 					}
 					console.log('Создано');
+					sendResult(true);
 				});
 			}
 		});
-	})
+	});
 }
 
-app.listen(port, function (error) {
+app.listen(port, error => {
 	if (error) {
 		console.error(error)
 	} else {
