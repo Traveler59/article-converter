@@ -9,7 +9,7 @@ class App extends Component {
 		const form = this.props.form;
 		const sendAddress = this.props.sendAddress;
 		return <div>
-			<Postform sendAddress={sendAddress} link={form.link} />
+			<Postform sendAddress={sendAddress} fileReady={form.fileReady} />
 		</div>
 	}
 }

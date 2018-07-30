@@ -9,10 +9,10 @@ export const sendAddress = (address, selectors) => dispatch => {
 		body: JSON.stringify({ address: `https://plato.stanford.edu/entries/${address}/`, selectors: selectors, site: 'sep' }),
 	})
 		.then(res => res.json())
-		.then(link =>
+		.then(fileReady =>
 			dispatch({
 				type: SEND_ADDRESS,
-				payload: link
+				payload: fileReady
 			})
 		);
 };

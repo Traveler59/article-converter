@@ -8,8 +8,7 @@ export default class PostForm extends Component {
     super(props);
     this.state = {
       address: '',
-      selectors: '',
-      link: props.link,
+      selectors: ''
     };
   }
 
@@ -56,7 +55,7 @@ export default class PostForm extends Component {
           <br />
           <button type='submit'>Отправить</button>
         </form>
-        <a href='/download' download>Скачать</a>
+        {this.props.fileReady && <a href='/download' download>Скачать</a>}
       </div>
     );
   }
@@ -64,5 +63,5 @@ export default class PostForm extends Component {
 
 PostForm.propTypes = {
   sendAddress: PropTypes.func.isRequired,
-  link: PropTypes.string.isRequired
+  fileReady: PropTypes.bool.isRequired
 };
