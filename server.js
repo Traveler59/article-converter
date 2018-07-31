@@ -41,7 +41,7 @@ const parseArticle = (address, userSelectors, sendResult) => {
 				console.log('Статья не найдена')
 				sendResult(false);
 			} else {
-				fs.writeFile(`articles/sep.html`, $.html(), err => {
+				fs.writeFile('articles/sep.html', $.html(), err => {
 					if (err) {
 						console.log(err);
 						sendResult(false);
