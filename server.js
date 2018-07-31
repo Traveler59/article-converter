@@ -5,20 +5,13 @@ const cheerio = require('cheerio');
 const fs = require('fs');
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 app.use('/dist', express.static(__dirname + '/dist'));
-app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.json());
 
-
-app.get('/', (req, res) => {
-	res.sendFile(__dirname + '/index.html')
-});
-
-app.get('/download', (req, res) => {
-	const file = __dirname + '/articles/sep.html';
-	res.download(file); // Set disposition and send it.
-});
+app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
+app.get('/download', (req, res) => res.download(__dirname + '/articles/sep.html'));
 
 app.post('/getArticle', (req, res) => {
 	if (!req.body) return res.sendStatus(400);
@@ -61,10 +54,7 @@ const parseArticle = (address, userSelectors, sendResult) => {
 	});
 }
 
-app.listen(port, error => {
-	if (error) {
-		console.error(error)
-	} else {
-		console.info('==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port)
-	}
-})
+app.listen(port, error => error
+	? console.error(error)
+	: console.info('==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port)
+)

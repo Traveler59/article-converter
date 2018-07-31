@@ -6,7 +6,7 @@ export const sendAddress = (address, selectors) => dispatch => {
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify({ address: `https://plato.stanford.edu/entries/${address}/`, selectors: selectors, site: 'sep' }),
+		body: JSON.stringify({ address: address, selectors: selectors, site: 'sep' }),
 	})
 		.then(res => res.json())
 		.then(fileReady =>
