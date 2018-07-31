@@ -15,12 +15,19 @@ export default class PostForm extends Component {
 	onSubmit = e => {
 		e.preventDefault();
 
+		const getSite = (address) =>
+			[{ url: '.wikipedia.org/wiki/', name: 'wikipedia' }, { url: '/plato.stanford.edu/entries/', name: 'sep' }]
+				.filter(a => !!~address.indexOf(a.url))[0].name;
+
+
 		const post = {
 			address: this.state.address,
 			selectors: this.state.selectors.split('\n')
 		};
 
-		this.props.sendAddress(post.address, post.selectors);
+		const site = getSite(post.address);
+
+		this.props.sendAddress(post.address, post.selectors, site ? site : null);
 	}
 
 	render() {
@@ -33,6 +40,7 @@ export default class PostForm extends Component {
 						<label>Адрес: </label>
 						<br />
 						<input
+							style={{ width: 500 }}
 							type='text'
 							name='address'
 							onChange={this.onChange}
@@ -44,6 +52,7 @@ export default class PostForm extends Component {
 						<label>Селекторы: </label>
 						<br />
 						<textarea
+							style={{ resize: 'vertical', width: 500 }}
 							name='selectors'
 							onChange={this.onChange}
 							value={this.state.selectors}
@@ -62,5 +71,5 @@ export default class PostForm extends Component {
 
 PostForm.propTypes = {
 	sendAddress: PropTypes.func.isRequired,
-	fileReady: PropTypes.bool.isRequired
+	fileReady: PropTypes.bool
 };

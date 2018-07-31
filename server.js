@@ -11,29 +11,48 @@ app.use('/dist', express.static(__dirname + '/dist'));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
-app.get('/download', (req, res) => res.download(__dirname + '/articles/sep.html'));
+app.get('/download', (req, res) => res.download(__dirname + '/articles/new.html'));
 
 app.post('/getArticle', (req, res) => {
 	if (!req.body) return res.sendStatus(400);
-	parseArticle(req.body.address, req.body.selectors, result => res.send(result));
+	parseArticle(req.body.address, req.body.selectors, req.body.site, result => res.send(result));
 });
 
+const sepSelectors = [
+	'#header-wrapper',
+	'#article-sidebar',
+	'#article-banner',
+	'#footer',
+	'#article-banner',
+	'script',
+	'img'
+];
 
-const parseArticle = (address, userSelectors, sendResult) => {
+const wikipediaSelectors = [
+	'.navbox',
+	'.mbox-small',
+	'.mw-indicators',
+	'.mw-editsection',
+	'gallery',
+	'#mw-head',
+	'#mw-panel',
+	'#footer',
+	'script',
+	'img'
+];
+
+const parseArticle = (address, selectors, site, sendResult) => {
 	https.get(address, res => {
 		let body = '';
 		res.on('data', chunk => body += chunk);
 
 		res.on('end', () => {
 			const $ = cheerio.load(body);
-			const selectors = [
-				'#header-wrapper',
-				'#article-sidebar',
-				'#article-banner',
-				'#footer',
-				'#article-banner',
-				'script'
-			].concat(userSelectors);
+			if(site === 'sep'){
+				selectors = selectors.concat(sepSelectors)
+			} else if(site === 'wikipedia'){
+				selectors = selectors.concat(wikipediaSelectors)
+			}
 
 			selectors.map(s => $(s).remove());
 
@@ -41,7 +60,7 @@ const parseArticle = (address, userSelectors, sendResult) => {
 				console.log('Статья не найдена')
 				sendResult(false);
 			} else {
-				fs.writeFile('articles/sep.html', $.html(), err => {
+				fs.writeFile('articles/new.html', $.html(), err => {
 					if (err) {
 						console.log(err);
 						sendResult(false);

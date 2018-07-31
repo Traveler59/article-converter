@@ -9,13 +9,14 @@
     "react"
   ],
   "rules": {
-    "no-var": "error",
+    "no-var": 2,
     "no-debugger": 0,
     "no-console": 0,
     "new-cap": 0,
     "strict": 1,
     "no-underscore-dangle": 0,
     "no-use-before-define": 0,
+    "no-unused-vars": 1,
     "eol-last": 0,
     "quotes": [
       1,
