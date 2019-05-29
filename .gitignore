@@ -64,4 +64,6 @@ typings/
 dist/
 articles/
 
+server.js
+
 .vscode/
