@@ -15,17 +15,18 @@ export default class PostForm extends Component {
 	onSubmit = e => {
 		e.preventDefault();
 
-		const getSite = (address) =>
-			[{ url: '.wikipedia.org/wiki/', name: 'wikipedia' }, { url: '/plato.stanford.edu/entries/', name: 'sep' }]
-				.filter(a => !!~address.indexOf(a.url))[0].name;
-
-
+		const getSiteName = (address) => {
+			const foundSite = [{ url: '.wikipedia.org/wiki/', name: 'wikipedia' }, { url: '/plato.stanford.edu/entries/', name: 'sep' }]
+				.find(a => !!~address.indexOf(a.url));
+			
+			return foundSite && foundSite.name;
+		}
 		const post = {
 			address: this.state.address,
 			selectors: this.state.selectors.split('\n')
 		};
 
-		const site = getSite(post.address);
+		const site = getSiteName(post.address);
 
 		this.props.sendAddress(post.address, post.selectors, site ? site : null);
 	}

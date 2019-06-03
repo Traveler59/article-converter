@@ -61,13 +61,13 @@ const parseArticle = (address: string, selectors: string[], site: string, sendRe
 			const $ = cheerio.load(body);
 			const foundSite = allSelectors.find(s => s.name.includes(site));
 
-			if (~$('#content').text().indexOf('Document Not Found') || !foundSite) {
+			if (~$('#content').text().indexOf('Document Not Found')) {
 				console.log('Статья не найдена')
 				sendResult(false);
 			} else {
-				const selectorsToDelete = selectors.concat(foundSite!.selectorsList)
+				const selectorsToDelete = selectors.concat(foundSite && foundSite.selectorsList || [])
 				selectorsToDelete.map(s => $(s).remove());
-				const heading = $(foundSite.headerSelector).text();
+				const heading = foundSite && $(foundSite.headerSelector).text();
 				console.log(heading);
 
 				fs.writeFile("articles/new.html", $.html(), err => {
