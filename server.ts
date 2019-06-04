@@ -48,6 +48,17 @@ const allSelectors = [
 			'script',
 			'img'
 		]
+	},
+	{
+		name: "nationalinterestSelectors",
+		headerSelector: "h1",
+		selectorsList: [
+			'.info',
+			'nav',
+			'.share',
+			'.footer',
+			'script'
+		]
 	}
 ];
 

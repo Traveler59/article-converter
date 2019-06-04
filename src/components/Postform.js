@@ -23,8 +23,12 @@ export default class PostForm extends Component {
 	onSubmit = e => {
 		e.preventDefault();
 
-		const getSiteNameFromKnown = (address) => {
-			const foundSite = [{ url: '.wikipedia.org/wiki/', name: 'wikipedia' }, { url: '/plato.stanford.edu/entries/', name: 'sep' }]
+		const getSiteNameFromKnown = address => {
+			const foundSite = [
+				{ url: '.wikipedia.org/wiki/', name: 'wikipedia' }, 
+				{ url: '/plato.stanford.edu/entries/', name: 'sep' },
+				{ url: 'nationalinterest.org/blog', name: 'nationalinterest' }
+			]
 				.find(a => !!~address.indexOf(a.url));
 			return foundSite && foundSite.name;
 		}
