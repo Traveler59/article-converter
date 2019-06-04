@@ -10,23 +10,36 @@ export default class PostForm extends Component {
 		};
 	}
 
-	onChange = e => this.setState({ [e.target.name]: e.target.value });
+	onChangeAdress = e => {
+		const storedSelectors = window.localStorage.getItem(`${extractHostname(e.target.value)}Selectors`);
+		this.setState(
+			{
+				address: e.target.value,
+				selectors: storedSelectors ? this.state.selectors.concat(storedSelectors) : this.state.selectors
+			}
+		);
+	};
 
 	onSubmit = e => {
 		e.preventDefault();
 
-		const getSiteName = (address) => {
+		const getSiteNameFromKnown = (address) => {
 			const foundSite = [{ url: '.wikipedia.org/wiki/', name: 'wikipedia' }, { url: '/plato.stanford.edu/entries/', name: 'sep' }]
 				.find(a => !!~address.indexOf(a.url));
-			
 			return foundSite && foundSite.name;
 		}
+
+		if (this.state.selectors.length) {
+			const name = `${extractHostname(this.state.address)}Selectors`;
+			window.localStorage.setItem(name, this.state.selectors);
+		}
+
 		const post = {
 			address: this.state.address,
 			selectors: this.state.selectors.split('\n')
 		};
 
-		const site = getSiteName(post.address);
+		const site = getSiteNameFromKnown(post.address);
 
 		this.props.sendAddress(post.address, post.selectors, site ? site : null);
 	}
@@ -43,8 +56,7 @@ export default class PostForm extends Component {
 						<input
 							style={{ width: 500 }}
 							type='text'
-							name='address'
-							onChange={this.onChange}
+							onChange={this.onChangeAdress}
 							value={this.state.address}
 						/>
 					</div>
@@ -54,8 +66,7 @@ export default class PostForm extends Component {
 						<br />
 						<textarea
 							style={{ resize: 'vertical', width: 500 }}
-							name='selectors'
-							onChange={this.onChange}
+							onChange={e => this.setState({ selectors: e.target.value })}
 							value={this.state.selectors}
 						/>
 					</div>
@@ -74,3 +85,5 @@ PostForm.propTypes = {
 	sendAddress: PropTypes.func.isRequired,
 	fileReady: PropTypes.bool
 };
+
+const extractHostname = url => url.split('/')[(url.indexOf('//') > -1 ? 2 : 0)];
