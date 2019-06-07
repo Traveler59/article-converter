@@ -91,7 +91,10 @@ const parseArticle = (address: string, selectors: string[], site: string, sendRe
 				});
 			}
 		})
-	});
+	}).on('error', e => {
+		console.log(e)
+		sendResult(false);
+	});;
 }
 
 app.listen(port, (error: string) => error

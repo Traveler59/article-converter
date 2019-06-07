@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Button, Col, Form } from 'react-bootstrap';
+import './Postform.css';
 
 export default class PostForm extends Component {
 	constructor(props) {
@@ -25,7 +27,7 @@ export default class PostForm extends Component {
 
 		const getSiteNameFromKnown = address => {
 			const foundSite = [
-				{ url: '.wikipedia.org/wiki/', name: 'wikipedia' }, 
+				{ url: '.wikipedia.org/wiki/', name: 'wikipedia' },
 				{ url: '/plato.stanford.edu/entries/', name: 'sep' },
 				{ url: 'nationalinterest.org/blog', name: 'nationalinterest' }
 			]
@@ -51,35 +53,35 @@ export default class PostForm extends Component {
 	render() {
 		const fileReady = this.props.fileReady;
 		return (
-			<div>
-				<h1>Скачать статью</h1>
-				<form onSubmit={this.onSubmit}>
-					<div>
-						<label>Адрес: </label>
-						<br />
-						<input
-							style={{ width: 500 }}
-							type='text'
-							onChange={this.onChangeAdress}
-							value={this.state.address}
-						/>
-					</div>
-					<br />
-					<div>
-						<label>Селекторы: </label>
-						<br />
-						<textarea
-							style={{ resize: 'vertical', width: 500 }}
-							onChange={e => this.setState({ selectors: e.target.value })}
-							value={this.state.selectors}
-						/>
-					</div>
-					<br />
-					<button type='submit'>Отправить</button>
-				</form>
-				{fileReady === true
-					? <a href='/download' download>Скачать</a>
-					: fileReady === false ? 'Ошибка' : <div />}
+			<div id='main'>
+				<Col md={{ span: 4, offset: 4 }}>
+					<h1>Скачать статью</h1>
+					<br/><br/>
+					<Form onSubmit={this.onSubmit}>
+						<Form.Group>
+							<Form.Label>Адрес: </Form.Label>
+							<Form.Control type='address' placeholder='Введите адрес' onChange={this.onChangeAdress} value={this.state.address} />
+							<Form.Text className='text-muted'>
+								Полный адрес необходимой статьи
+							</Form.Text>
+						</Form.Group>
+
+						<Form.Group>
+							<Form.Label>Селекторы: </Form.Label>
+							<Form.Control as='textarea' type='password'
+								placeholder='Перечислите селекторы, которые необходимо удалить, такие как .footer и проч.'
+								onChange={e => this.setState({ selectors: e.target.value })} value={this.state.selectors} />
+						</Form.Group>
+						<Button variant='primary' type='submit' disabled={!this.state.address.length}>
+							Отправить
+						</Button>
+						{fileReady === true
+							? <a id='downloadLink' href='/download' download>Скачать</a>
+							: fileReady === false
+								? <Form.Text className='text-muted'>Ошибка. Проверьте правильность адреса</Form.Text>
+								: <div />}
+					</Form>
+				</Col>
 			</div>
 		);
 	}
