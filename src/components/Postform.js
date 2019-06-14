@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Col, Form } from 'react-bootstrap';
-import './Postform.css';
+import { Col, Form } from 'react-bootstrap';
+import './Postform.scss';
 
 export default class PostForm extends Component {
 	constructor(props) {
@@ -12,7 +12,7 @@ export default class PostForm extends Component {
 		};
 	}
 
-	onChangeAdress = e => {
+	onChangeAddress = e => {
 		const storedSelectors = window.localStorage.getItem(`${extractHostname(e.target.value)}Selectors`);
 		this.setState(
 			{
@@ -52,37 +52,36 @@ export default class PostForm extends Component {
 
 	render() {
 		const fileReady = this.props.fileReady;
+		const dosInput = '_____________________________________________';
 		return (
-			<div id='main'>
-				<Col md={{ span: 4, offset: 4 }}>
-					<h1>Скачать статью</h1>
-					<br/><br/>
-					<Form onSubmit={this.onSubmit}>
-						<Form.Group>
-							<Form.Label>Адрес: </Form.Label>
-							<Form.Control type='address' placeholder='Введите адрес' onChange={this.onChangeAdress} value={this.state.address} />
-							<Form.Text className='text-muted'>
-								Полный адрес необходимой статьи
-							</Form.Text>
-						</Form.Group>
+			<Col id='main' lg={{ span: 4, offset: 4 }} md={12}>
+				<h1>Download</h1>
+				<br /><br />
+				<Form onSubmit={this.onSubmit}>
+					<Form.Group>
+						<Form.Label>Address: </Form.Label>
+						<Form.Control type='address' placeholder={dosInput} onChange={this.onChangeAddress} value={this.state.address} />
+					</Form.Group>
+					<p>Full address of the article</p>
+					<br /><br />
 
-						<Form.Group>
-							<Form.Label>Селекторы: </Form.Label>
-							<Form.Control as='textarea' type='password'
-								placeholder='Перечислите селекторы, которые необходимо удалить, такие как .footer и проч.'
-								onChange={e => this.setState({ selectors: e.target.value })} value={this.state.selectors} />
-						</Form.Group>
-						<Button variant='primary' type='submit' disabled={!this.state.address.length}>
-							Отправить
-						</Button>
-						{fileReady === true
-							? <a id='downloadLink' href='/download' download>Скачать</a>
-							: fileReady === false
-								? <Form.Text className='text-muted'>Ошибка. Проверьте правильность адреса</Form.Text>
-								: <div />}
-					</Form>
-				</Col>
-			</div>
+					<Form.Group>
+						<Form.Label>Selectors: </Form.Label>
+						<Form.Control as='textarea' type='password'
+							placeholder={dosInput}
+							onChange={e => this.setState({ selectors: e.target.value })} value={this.state.selectors} />
+					</Form.Group>
+					<p>Set list of selectors, that will be removed, ex. .footer etc.</p>
+					{!!this.state.address.length && <button type='submit'>
+						Submit
+						</button>}
+					{fileReady === true
+						? <a href='/download' download>Download</a>
+						: fileReady === false
+							? <Form.Text className='text-muted'>Error. Check the address</Form.Text>
+							: <div />}
+				</Form>
+			</Col>
 		);
 	}
 }

@@ -20,6 +20,7 @@
         "watch": true,
     },
     "include": [
-        "server.ts"
+        "server.ts",
+        "webpack.config.ts"
     ],
 }

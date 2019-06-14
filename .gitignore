@@ -65,5 +65,6 @@ dist/
 articles/
 
 server.js
+webpack.config.js
 
 .vscode/

@@ -1,0 +1,69 @@
+$back-msdos: rgb(155, 155, 155);
+$link: rgb(26, 24, 120);
+$hover-link: rgb(123, 32, 35);
+$active-link: rgb(118, 50, 116);
+
+$font_dir: '../../fonts/perfect_dos_vga_437_win-webfont';
+
+@font-face {
+    font-family: 'MSDOS';
+    src: url('#{$font_dir}.eot');
+    src: url('#{$font_dir}.svg#webfont') format('svg'), url('#{$font_dir}.woff2') format('woff2'), url('#{$font_dir}.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background-color: $back-msdos;
+    font-family: MSDOS;
+}
+
+form {
+    font-size: 18pt;
+    color: black;
+}
+
+#main {
+    margin-top: 90px;
+}
+
+a {
+    display: block;
+}
+
+button {
+    padding: 0px;
+    background-color: $back-msdos;
+    border: 0px;
+}
+
+button, a {
+    color: $link;
+
+    &:hover {
+        color: $hover-link;
+        text-decoration: none;
+    }
+
+    &:active {
+        color: $active-link;
+    }
+}
+
+.form-control {
+    padding: 0px !important;
+    border: none !important;
+    font-size: 18pt !important;
+    color: black !important;
+    background-color: $back-msdos !important;
+
+    &::placeholder {
+        color: black !important;
+    }
+
+    &:focus {
+        -webkit-box-shadow: none !important;
+        -moz-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+}
