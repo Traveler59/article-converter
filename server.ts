@@ -64,37 +64,42 @@ const allSelectors = [
 
 
 const parseArticle = (address: string, selectors: string[], site: string, sendResult: (result: boolean) => void) => {
-	https.get(address, res => {
-		let body = '';
-		res.on('data', chunk => body += chunk);
+	try {
+		https.get(address, res => {
+			let body = '';
+			res.on('data', chunk => body += chunk);
 
-		res.on('end', () => {
-			const $ = cheerio.load(body);
-			const foundSite = allSelectors.find(s => s.name.includes(site));
+			res.on('end', () => {
+				const $ = cheerio.load(body);
+				const foundSite = allSelectors.find(s => s.name.includes(site));
 
-			if (~$('#content').text().indexOf('Document Not Found')) {
-				console.log('Статья не найдена')
-				sendResult(false);
-			} else {
-				const selectorsToDelete = selectors.concat(foundSite && foundSite.selectorsList || [])
-				selectorsToDelete.map(s => $(s).remove());
-				const heading = foundSite && $(foundSite.headerSelector).text();
-				console.log(heading);
+				if (~$('#content').text().indexOf('Document Not Found')) {
+					console.log('Статья не найдена')
+					sendResult(false);
+				} else {
+					const selectorsToDelete = selectors.concat(foundSite && foundSite.selectorsList || [])
+					selectorsToDelete.map(s => $(s).remove());
+					const heading = foundSite && $(foundSite.headerSelector).text();
+					console.log(heading);
 
-				fs.writeFile("articles/new.html", $.html(), err => {
-					if (err) {
-						console.log(err);
-						sendResult(false);
-					}
-					console.log('Создано');
-					sendResult(true);
-				});
-			}
-		})
-	}).on('error', e => {
-		console.log(e)
+					fs.writeFile("articles/new.html", $.html(), err => {
+						if (err) {
+							console.log(err);
+							sendResult(false);
+						}
+						console.log('Создано');
+						sendResult(true);
+					});
+				}
+			})
+		}).on('error', e => {
+			console.log(e)
+			sendResult(false);
+		});;
+	} catch(e) {
+		console.log(e);
 		sendResult(false);
-	});;
+	}
 }
 
 app.listen(port, (error: string) => error

@@ -2,6 +2,7 @@ $back-msdos: rgb(155, 155, 155);
 $link: rgb(26, 24, 120);
 $hover-link: rgb(123, 32, 35);
 $active-link: rgb(118, 50, 116);
+$highlighted-text: rgb(98, 102, 43);
 
 $font_dir: '../../fonts/perfect_dos_vga_437_win-webfont';
 
@@ -18,13 +19,10 @@ body {
     font-family: MSDOS;
 }
 
-form {
+#main {
+    margin-top: 80px;
     font-size: 18pt;
     color: black;
-}
-
-#main {
-    margin-top: 90px;
 }
 
 a {
@@ -66,4 +64,8 @@ button, a {
         -moz-box-shadow: none !important;
         box-shadow: none !important;
     }
+}
+
+.highlighted-text {
+    color: $highlighted-text;
 }
