@@ -3,6 +3,14 @@ import * as bodyParser from 'body-parser';
 import * as https from 'https';
 import * as cheerio from 'cheerio';
 import * as fs from 'fs';
+import * as mongo from 'mongodb';
+
+const dbUrl = 'mongodb://localhost:27017/article_sites';
+const allSelectors: {
+	name: string,
+	headerSelector: string,
+	selectorsList: string[]
+}[] = [];
 
 const app: express.Application = express();
 const port = 4000;
@@ -17,51 +25,6 @@ app.post('/getArticle', (req, res) => {
 	if (!req.body) res.sendStatus(400);
 	else parseArticle(req.body.address, req.body.selectors, req.body.site, result => res.send(result));
 })
-
-
-const allSelectors = [
-	{
-		name: "sepSelectors",
-		headerSelector: "h1",
-		selectorsList: [
-			'#header-wrapper',
-			'#article-sidebar',
-			'#article-banner',
-			'#footer',
-			'#article-banner',
-			'script',
-			'img'
-		]
-	},
-	{
-		name: "wikipediaSelectors",
-		headerSelector: "h1",
-		selectorsList: [
-			'.navbox',
-			'.mbox-small',
-			'.mw-indicators',
-			'.mw-editsection',
-			'gallery',
-			'#mw-head',
-			'#mw-panel',
-			'#footer',
-			'script',
-			'img'
-		]
-	},
-	{
-		name: "nationalinterestSelectors",
-		headerSelector: "h1",
-		selectorsList: [
-			'.info',
-			'nav',
-			'.share',
-			'.footer',
-			'script'
-		]
-	}
-];
-
 
 const parseArticle = (address: string, selectors: string[], site: string, sendResult: (result: boolean) => void) => {
 	try {
@@ -82,7 +45,7 @@ const parseArticle = (address: string, selectors: string[], site: string, sendRe
 					const heading = foundSite && $(foundSite.headerSelector).text();
 					console.log(heading);
 
-					fs.writeFile("articles/new.html", $.html(), err => {
+					fs.writeFile('articles/new.html', $.html(), err => {
 						if (err) {
 							console.log(err);
 							sendResult(false);
@@ -95,14 +58,26 @@ const parseArticle = (address: string, selectors: string[], site: string, sendRe
 		}).on('error', e => {
 			console.log(e)
 			sendResult(false);
-		});;
-	} catch(e) {
+		});
+	} catch (e) {
 		console.log(e);
 		sendResult(false);
 	}
 }
 
-app.listen(port, (error: string) => error
-	? console.error(error)
-	: console.info('==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port)
-)
+const startListening = () =>
+	app.listen(port, (error: string) => error
+		? console.error(error)
+		: console.info('==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port)
+	);
+
+
+(async () => {
+	const client = new mongo.MongoClient(dbUrl, { useNewUrlParser: true });
+	await client.connect();
+	const cursor = client.db('article_sites').collection('sites').find();
+	cursor.forEach(doc => allSelectors.push(doc), () => {
+		client.close()
+		startListening();
+	});
+})();
