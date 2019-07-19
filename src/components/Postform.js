@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Col, Form } from 'react-bootstrap';
 import './Postform.scss';
+import assert from 'assert';
 
 export default class PostForm extends Component {
 	constructor(props) {
@@ -99,4 +100,4 @@ PostForm.propTypes = {
 	fileReady: PropTypes.bool
 };
 
-const extractHostname = url => url.split('/')[(url.indexOf('//') > -1 ? 2 : 0)];
+export const extractHostname = url => url.split('/')[(url.indexOf('//') > -1 ? 2 : 0)];

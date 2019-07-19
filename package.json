@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack --mode production",
-    "watch": "webpack --watch --mode development"
+    "watch": "webpack --watch --mode development",
+    "test": "mocha --require node_modules/@babel/register --require node_modules/ignore-styles"
   },
   "license": "MIT",
   "dependencies": {
@@ -15,10 +16,12 @@
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.5.5",
     "@types/body-parser": "^1.17.0",
     "@types/cheerio": "^0.22.11",
     "@types/express": "^4.16.1",
     "@types/mini-css-extract-plugin": "^0.2.1",
+    "@types/mocha": "^5.2.7",
     "@types/mongodb": "^3.1.28",
     "babel-loader": "^8.0.6",
     "body-parser": "^1.18.3",
@@ -29,7 +32,9 @@
     "eslint-plugin-react": "4",
     "express": "^4.16.3",
     "file-loader": "^4.0.0",
+    "ignore-styles": "^5.0.1",
     "mini-css-extract-plugin": "^0.7.0",
+    "mocha": "^6.2.0",
     "mongodb": "^3.2.7",
     "node-sass": "^4.12.0",
     "prop-types": "^15.6.2",
