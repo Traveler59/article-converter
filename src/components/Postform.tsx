@@ -1,19 +1,30 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import { Col, Form } from 'react-bootstrap';
 import './Postform.scss';
-import assert from 'assert';
+import { Dispatch } from 'redux';
+import { SiteActionTypes } from '../actions/types';
 
-export default class PostForm extends Component {
-	constructor(props) {
+interface FormProps {
+	sendAddress: (address: string, selectors: string[], siteName: string | null) => (dispatch: Dispatch<SiteActionTypes>) => Promise<void>,
+	fileReady: boolean
+};
+
+interface FormState {
+	address: string,
+	selectors: string
+};
+
+export type ChangeEvent = React.ChangeEvent<React.HTMLProps<React.Component>>;
+
+export default class PostForm extends React.Component<FormProps, FormState> {
+	constructor(props: FormProps) {
 		super(props);
 		this.state = {
 			address: '',
 			selectors: ''
 		};
 	}
-
-	getSiteNameFromKnown = address => {
+	getSiteNameFromKnown = (address: string) => {
 		const recognizedSite = [
 			{ url: '.wikipedia.org/wiki/', name: 'wikipedia' },
 			{ url: '/plato.stanford.edu/entries/', name: 'sep' },
@@ -23,20 +34,20 @@ export default class PostForm extends Component {
 		return recognizedSite && recognizedSite.name;
 	}
 
-	onChangeAddress = e => {
-		const storedSelectors = window.localStorage.getItem(`${extractHostname(e.target.value)}Selectors`);
+	onChangeAddress = (e: ChangeEvent) => {
+		const storedSelectors = window.localStorage.getItem(`${extractHostname(e.target.value as string)}Selectors`);
 		this.setState(
 			{
-				address: e.target.value,
+				address: e.target.value as string,
 				selectors: storedSelectors ? this.state.selectors.concat(storedSelectors) : this.state.selectors
 			}
 		);
 	};
 
-	onSubmit = e => {
+	onSubmit = (e:React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		if (this.state.selectors.length) {
+		if (!!this.state.selectors.length) {
 			const name = `${extractHostname(this.state.address)}Selectors`;
 			window.localStorage.setItem(name, this.state.selectors);
 		}
@@ -77,7 +88,7 @@ export default class PostForm extends Component {
 								<Form.Label>Selectors: </Form.Label>
 								<Form.Control as='textarea' type='password'
 									placeholder={dosInput}
-									onChange={e => this.setState({ selectors: e.target.value })} value={this.state.selectors} />
+									onChange={(e: ChangeEvent) => this.setState({ selectors: e.target.value as string })} value={this.state.selectors} />
 							</Form.Group>
 						</div>
 					}
@@ -95,9 +106,4 @@ export default class PostForm extends Component {
 	}
 }
 
-PostForm.propTypes = {
-	sendAddress: PropTypes.func.isRequired,
-	fileReady: PropTypes.bool
-};
-
-export const extractHostname = url => url.split('/')[(url.indexOf('//') > -1 ? 2 : 0)];
+export const extractHostname = (url: string) => url.split('/')[(url.indexOf('//') > -1 ? 2 : 0)];

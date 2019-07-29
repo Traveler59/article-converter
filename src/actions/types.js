@@ -1,1 +1,0 @@
-export const SEND_ADDRESS = 'SEND_ADDRESS';

@@ -1,0 +1,22 @@
+{
+	"rules": {
+		"no-unused-expression": true,
+		"no-duplicate-variable": true,
+		"curly": true,
+		"class-name": true,
+		"semicolon": true,
+		"triple-equals": true,
+		"indent": [true, "tabs", 4],
+		"no-debugger": true,
+		"prefer-const": true,
+		"quotemark": [true, "single"],
+		"no-default-export": true,
+		"no-var-keyword": true,
+		"no-unused-variable": true,
+		"no-trailing-whitespace": true,
+		"only-arrow-functions": [true],
+		"ordered-imports": [true, {"grouped-imports": true}],
+		"linebreak-style": [true, "CRLF"],
+		"no-consecutive-blank-lines": true
+	}
+}

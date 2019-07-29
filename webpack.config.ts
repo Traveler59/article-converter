@@ -1,7 +1,7 @@
 import * as MiniCssWebpackPlugin from 'mini-css-extract-plugin';
 
 module.exports = {
-	entry: './src/index.js',
+	entry: './src/index.tsx',
 	output: {
 		path: __dirname + '/dist',
 		filename: 'main.js',
@@ -9,11 +9,7 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.js$/,
-				loader: 'babel-loader'
-			},
-			{
-				test: /\.ts$/,
+				test: /\.(tsx|ts)$/,
 				loader: 'ts-loader'
 			},
 			{
@@ -35,6 +31,9 @@ module.exports = {
 				}]
 			}
 		],
+	},
+	resolve: {
+		extensions: ['.ts', '.tsx', '.js', '.json']
 	},
 	plugins: [
 		new MiniCssWebpackPlugin({ filename: 'bundle.css' })

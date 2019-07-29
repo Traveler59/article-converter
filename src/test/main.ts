@@ -1,6 +1,7 @@
-import assert from 'assert';
-import { extractHostname } from '../src/components/Postform';
-import { parseArticle } from '../server';
+import * as assert from 'assert';
+
+import { extractHostname } from '../components/Postform';
+import { parseArticle } from '../../server';
 
 describe('Extracting host name', () => {
 	it('should delete all slashes', () => {
